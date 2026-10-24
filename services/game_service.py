@@ -18,6 +18,7 @@ def create_game(game_data: GameCreate, session: Session):
 
     # PISTA: recuerda el orden visto en clase para guardar un objeto
     # y luego recargar los valores generados por la base de datos.
+    session.commit()
     session.refresh(game)
 
     return game
@@ -30,7 +31,13 @@ def list_games(session: Session):
 
 def get_game(game_id: int, session: Session):
     # PISTA: ¿qué debería devolver una API cuando el recurso solicitado no existe?
-    return session.get(Game, game_id)
+    game = session.get(Game, game_id)
+    if not game:
+        raise HTTPException(
+            status_code=404,
+            detail="Game not found"
+        )
+    return game
 
 
 def delete_game(game_id: int, session: Session):
@@ -47,4 +54,5 @@ def delete_game(game_id: int, session: Session):
     # PISTA: eliminar un objeto de una sesión no necesariamente significa
     # que la eliminación haya quedado guardada en SQLite.
 
+    session.commit()
     return {"message": "Game deleted"}
