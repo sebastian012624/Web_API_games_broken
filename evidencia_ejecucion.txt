@@ -1,0 +1,14 @@
+Evidencia de ejecución — ArcadeShelf API
+
+Validación realizada con FastAPI TestClient usando SQLite en un directorio temporal.
+Resultado: P01–P07 aprobadas.
+
+P01 — POST /games con datos válidos: 201; se generó un ID y active quedó en true.
+P02 — POST /games con stock=0: 422.
+P03 — GET /games: 200; devolvió una lista con dos juegos.
+P04 — GET /games/{id} existente: 200; devolvió el juego solicitado.
+P05 — GET /games/999 inexistente: 404 con {"detail":"Game not found"}.
+P06 — DELETE /games/{id}: 200 con {"message":"Game deleted"}; la consulta posterior devolvió 404.
+P07 — Se reinició el TestClient contra la misma base SQLite: el juego no eliminado persistió y el eliminado no reapareció.
+
+Entorno usado para esta verificación: FastAPI 0.143.2, SQLModel 0.0.48, HTTPX 0.28.1.
